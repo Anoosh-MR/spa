@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
-import bgImage from "../../assets/Rectangle.jpg";
+import bgImage from "../../assets/images/Rectangle.jpg";
 import "react-phone-input-2/lib/style.css";
 import { Grid } from "@mui/material";
 var family = `"Manrope", sans-serif`;
