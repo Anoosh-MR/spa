@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import "react-phone-input-2/lib/style.css";
-import { Grid, Link, TextField, Typography } from "@mui/material";
+import { Grid, InputLabel, Link, TextField, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -54,12 +54,19 @@ export const Fields = styled(TextField)`
   width: 300px;
 `;
 
-export const InputLabel = styled.label`
+export const Label = styled(InputLabel)`
   margin-bottom: 5px;
   font-family: ${familyMan};
   font-size: 0.8em;
   font-weight: 400;
   font-weight: 600;
+`;
+export const NormalLabel = styled.label`
+  margin-bottom: 5px;
+  font-family: ${familyMan};
+  font-size: 0.8em;
+  font-weight: 400;
+  color: grey;
 `;
 export const LINKS = styled(Link)`
   font-family: ${family};

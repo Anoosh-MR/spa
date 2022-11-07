@@ -1,6 +1,10 @@
 import { Box, Checkbox } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Banner from "../../../components/Banner/Banner";
+import { useSelector, useDispatch } from "react-redux";
+import { register, reset } from "../../../Redux/authSlice";
+import { useNavigate } from "react-router-dom";
+
 import {
   Button,
   Fields,
@@ -9,17 +13,57 @@ import {
   GridContainer2,
   InputBox,
   InputItems,
-  InputLabel,
+  Label,
   LINKS,
   MainContainer,
+  NormalLabel,
   Phone,
   SubHeading,
 } from "./SignUp.styled";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const [phone, setPhoneNumber] = useState();
+
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    phone: "",
+    email: "",
+    password: "",
+  });
+
+  const { firstname, lastname, email, password } = formData;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      ...phonenum,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmiit = (e) => {
+    e.preventDefault();
+    if (!firstname || !lastname || !email || !password || !phone) {
+      toast.warning("Please fill all the fields!");
+    } else {
+      const userData = {
+        firstname,
+        lastname,
+        email,
+        password,
+        phone,
+      };
+      dispatch(register(userData));
+    }
+  };
+
   return (
     <MainContainer maxWidth="xxl">
-      {/* Banner component */}
       <Banner />
       <FormBox>
         <GridContainer2>
@@ -30,8 +74,11 @@ const SignUp = () => {
           <Box component="form" noValidate sx={{ mt: 4 }}>
             <InputBox>
               <InputItems>
-                <InputLabel htmlFor="firstname">First Name*</InputLabel>
+                <Label htmlFor="firstname">First Name*</Label>
                 <Fields
+                  onChange={onChange}
+                  type="text"
+                  name="firstname"
                   required
                   color="primary"
                   autoFocus
@@ -40,18 +87,34 @@ const SignUp = () => {
                 />
               </InputItems>
               <InputItems>
-                <InputLabel htmlFor="firstname">Last Name*</InputLabel>
-                <Fields required id="firstname" size="small" />
+                <Label htmlFor="lastname">Last Name*</Label>
+                <Fields
+                  onChange={onChange}
+                  type="text"
+                  required
+                  id="lastname"
+                  size="small"
+                  name="lastname"
+                />
               </InputItems>
             </InputBox>
             <InputBox>
               <InputItems>
-                <InputLabel htmlFor="email">Email Address*</InputLabel>
-                <Fields required id="email" size="small" />
+                <Label htmlFor="email">Email Address*</Label>
+                <Fields
+                  onChange={onChange}
+                  type="email"
+                  required
+                  id="email"
+                  size="small"
+                  name="email"
+                />
               </InputItems>
               <InputItems>
-                <InputLabel htmlFor="phone">Phone Number*</InputLabel>
+                <NormalLabel htmlFor="phone">Phone Number*</NormalLabel>
                 <Phone
+                  onChange={(phone) => setPhoneNumber({ phone })}
+                  name="phone"
                   id="phone"
                   country={"us"}
                   containerStyle={{ bottom: "30px" }}
@@ -61,21 +124,30 @@ const SignUp = () => {
             </InputBox>
             <InputBox>
               <InputItems>
-                <InputLabel htmlFor="password">Password*</InputLabel>
-                <Fields required id="password" size="small" />
+                <Label htmlFor="password">Password*</Label>
+                <Fields
+                  onChange={onChange}
+                  type="password"
+                  required
+                  id="password"
+                  size="small"
+                  name="password"
+                />
               </InputItems>
             </InputBox>
 
             <Checkbox id="checkbox" />
-            <InputLabel>
+            <Label>
               By signing up, you agree to our<LINKS>User Agreement</LINKS> ,
               <LINKS>Terms of Service</LINKS>, & <LINKS>Privacy Policy</LINKS>
-            </InputLabel>
+            </Label>
           </Box>
-          <Button variant="contained">Sign Up</Button>
-          <InputLabel>
+          <Button variant="contained" onClick={handleSubmiit}>
+            Sign Up
+          </Button>
+          <Label>
             Already have an account?<LINKS href="/login">Log In</LINKS>
-          </InputLabel>
+          </Label>
         </GridContainer2>
       </FormBox>
     </MainContainer>
