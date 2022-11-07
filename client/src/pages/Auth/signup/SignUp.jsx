@@ -31,21 +31,28 @@ const SignUp = () => {
             <InputBox>
               <InputItems>
                 <InputLabel htmlFor="firstname">First Name*</InputLabel>
-                <Fields color="primary" autoFocus id="firstname" size="small" />
+                <Fields
+                  required
+                  color="primary"
+                  autoFocus
+                  id="firstname"
+                  size="small"
+                />
               </InputItems>
               <InputItems>
                 <InputLabel htmlFor="firstname">Last Name*</InputLabel>
-                <Fields id="firstname" size="small" />
+                <Fields required id="firstname" size="small" />
               </InputItems>
             </InputBox>
             <InputBox>
               <InputItems>
-                <InputLabel htmlFor="firstname">Email Address*</InputLabel>
-                <Fields id="firstname" size="small" />
+                <InputLabel htmlFor="email">Email Address*</InputLabel>
+                <Fields required id="email" size="small" />
               </InputItems>
               <InputItems>
-                <InputLabel htmlFor="firstname">Phone Number*</InputLabel>
+                <InputLabel htmlFor="phone">Phone Number*</InputLabel>
                 <Phone
+                  id="phone"
                   country={"us"}
                   containerStyle={{ bottom: "30px" }}
                   inputStyle={{ height: "40px" }}
@@ -54,8 +61,8 @@ const SignUp = () => {
             </InputBox>
             <InputBox>
               <InputItems>
-                <InputLabel htmlFor="firstname">Password*</InputLabel>
-                <Fields id="firstname" size="small" />
+                <InputLabel htmlFor="password">Password*</InputLabel>
+                <Fields required id="password" size="small" />
               </InputItems>
             </InputBox>
 

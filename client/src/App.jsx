@@ -13,7 +13,7 @@ function App() {
           <Route path="/" element={<Home />} exact />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
-          <Route path="/error" element={<Error404 />} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </Router>
     </ThemeProvider>

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import "react-phone-input-2/lib/style.css";
-import { Grid, Link, TextField, Typography } from "@mui/material";
+import { Link, TextField, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -60,8 +60,9 @@ export const InputLabel = styled.label`
   margin-bottom: 5px;
   font-family: ${familyMan};
   font-size: 0.8em;
-  font-weight: 600;
+  font-weight: 500;
 `;
+
 export const LINKS = styled(Link)`
   font-family: ${familyMan};
   text-decoration: none;

@@ -28,7 +28,7 @@ const Error404 = () => {
           <br /> The page you are looking for could not be found.
         </Paragraph>
       </Box>
-      <BackToHome href="/home" variant="contained" startIcon={<Icon />}>
+      <BackToHome href="/" variant="contained" startIcon={<Icon />}>
         Back to home
       </BackToHome>
     </TopError>
