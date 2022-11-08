@@ -27,9 +27,7 @@ const registerUser = async (req, res) => {
     const user = await newUser
       .save()
       .then((data) => EmailVarification(data, res));
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
+  } catch (err) {}
 };
 
 // login user
@@ -79,7 +77,7 @@ const varifyOtp = async (req, res) => {
           if (!validOTP) {
             throw new Error("The OTP was in valid please check your email!");
           } else {
-            await User.updateOne({ _id: userId }, { varified: true });
+            await User.updateOne({ _id: userId }, { Varified: true });
             await OtpModel.deleteMany({ userId });
             res.json({
               status: "VERIFIED",

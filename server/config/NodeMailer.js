@@ -3,11 +3,11 @@ const bcrypt = require("bcrypt");
 const OtpModel = require("../models/OtpVarificationModel");
 
 let transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
+  host: "smtp.office365.com",
   port: 587,
   auth: {
-    user: "lynn.douglas@ethereal.email",
-    pass: "Vd3SKK27AnTVRgddBC",
+    user: process.env.NODE_EMAIL,
+    pass: process.env.NODE_PASS,
   },
 });
 
@@ -24,7 +24,7 @@ const EmailVarification = async ({ id, email }, res) => {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
     const mailOption = {
-      from: "lynn.douglas@ethereal.email",
+      from: process.env.NODE_EMAIL,
       to: email,
       subject: "Varify your Email",
       html: `<p>Enter <b>${otp}</b>in the app</p>
@@ -42,6 +42,7 @@ const EmailVarification = async ({ id, email }, res) => {
     const NewOTP = await newOTPverification.save();
 
     await transporter.sendMail(mailOption);
+
     res.json({
       status: "PENDING",
       message: "Varification Otp email send",

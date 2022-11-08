@@ -1,6 +1,11 @@
 import { Box, Button, Container, TextField } from "@mui/material";
-import React from "react";
-import OtpInput from "react-otp-input";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import LoadingButton from "@mui/lab/LoadingButton";
+import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const style = {
   width: 613,
@@ -17,11 +22,38 @@ const style = {
   flexDirection: "column",
 };
 
-const inputstyle = {
-  backgroundColor: "white",
-};
-
 const OtpVerification = () => {
+  const [otp, setOtp] = useState();
+  const [userId, setUserId] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cookie = Cookies.get("otp");
+    setUserId(cookie);
+  });
+
+  const handleSubmit = async () => {
+    try {
+      if (!otp || !userId) {
+        toast.warning("please fill all the fields");
+      } else {
+        const data = await axios.post(
+          "http://localhost:5000/api/user/varifyOtp/",
+          {
+            userId,
+            otp,
+          }
+        );
+        if (data) {
+          toast.success("Registered success!Login");
+          navigate("/login");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Container
       maxWidth="lg"
@@ -34,15 +66,23 @@ const OtpVerification = () => {
     >
       <Box sx={style}>
         <Box>
-          <TextField type="number" size="small" />
+          <TextField
+            type="number"
+            size="small"
+            onChange={(e) => setOtp(e.target.value)}
+          />
         </Box>
         <Box sx={{ gap: "10px", display: "flex" }}>
           <Button variant="outlined" sx={{ textTransform: "none" }}>
             Resend
           </Button>
-          <Button sx={{ textTransform: "none" }} variant="contained">
+          <LoadingButton
+            sx={{ textTransform: "none" }}
+            variant="contained"
+            onClick={handleSubmit}
+          >
             Vaify
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Container>

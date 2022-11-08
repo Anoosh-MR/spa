@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const dotenv = require(dotenv).config();
+
 const User = require("../models/userModel");
 
 const authenticateJWT = (req, res, next) => {
@@ -21,3 +21,5 @@ const authenticateJWT = (req, res, next) => {
     throw new Error("Not authorized, token failed");
   }
 };
+
+module.exports = authenticateJWT;

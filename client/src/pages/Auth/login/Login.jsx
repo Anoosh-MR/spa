@@ -9,7 +9,7 @@ import {
   InputAdornment,
   OutlinedInput,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Banner from "../../../components/Banner/Banner";
 import {
@@ -25,12 +25,49 @@ import {
   MainContainer,
   SubHeading,
 } from "./Login.styled";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { login, reset } from "../../../Redux/authSlice";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Login = () => {
   const [show, setShow] = useState(false);
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
+  };
+
   return (
     <MainContainer maxWidth="xxl">
-      {/* Banner component */}
       <Banner />
       <FormBox>
         <GridContainer2>
@@ -39,18 +76,25 @@ const Login = () => {
           <Box component="form" noValidate sx={{ mt: 4 }}>
             <InputBox>
               <InputItems>
-                <InputLabel htmlFor="firstname">Email Address*</InputLabel>
-                <Fields required type="email" id="firstname" size="small" />
+                <InputLabel htmlFor="email">Email Address*</InputLabel>
+                <Fields
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  type="email"
+                  id="email"
+                  size="small"
+                />
               </InputItems>
               <InputItems>
-                <InputLabel htmlFor="firstname">Password*</InputLabel>
+                <InputLabel htmlFor="password">Password*</InputLabel>
 
                 <OutlinedInput
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   size="small"
                   autoComplete="email"
                   autoFocus
-                  id="firstname"
+                  id="password"
                   type={show ? "text" : "password"}
                   endAdornment={
                     <InputAdornment position="end">
@@ -81,7 +125,13 @@ const Login = () => {
               </LINKS>
             </Grid>
           </Box>
-          <Button variant="contained">Sign Up</Button>
+          <LoadingButton
+            loading={isLoading}
+            onClick={onSubmit}
+            variant="contained"
+          >
+            Sign Up
+          </LoadingButton>
         </GridContainer2>
       </FormBox>
     </MainContainer>

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 import {
   HeaderBox,
   Heading,
@@ -10,8 +11,17 @@ import {
 } from "./Home.styled";
 import image from "../../assets/images/image 15.jpg";
 import UploadModel from "../../components/uploadModal/UploadModel";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.user
+  );
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) navigate("/register");
+  }, [navigate]);
   return (
     <HomeContainer>
       <HeaderBox>

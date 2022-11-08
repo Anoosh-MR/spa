@@ -1,5 +1,5 @@
 import { Box, Checkbox } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "../../../components/Banner/Banner";
 import { useSelector, useDispatch } from "react-redux";
 import { register, reset } from "../../../Redux/authSlice";
@@ -24,7 +24,8 @@ import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [phone, setPhoneNumber] = useState();
-
+  const [cheked, setCheked] = useState(true);
+  console.log(cheked);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -38,16 +39,34 @@ const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { user, isLoading, isError, isSuccessRegister, message } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccessRegister || user) {
+      navigate("/");
+    }
+    dispatch(reset);
+  }, [user, isError, isSuccessRegister, message, navigate, dispatch]);
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      ...phonenum,
       [e.target.name]: e.target.value,
     }));
   };
 
   const handleSubmiit = (e) => {
     e.preventDefault();
+    if (!cheked) {
+      toast.POSITION.BOTTOM_CENTER.warning(
+        "cant proceed without accepting our policies!"
+      );
+    }
     if (!firstname || !lastname || !email || !password || !phone) {
       toast.warning("Please fill all the fields!");
     } else {
@@ -56,9 +75,10 @@ const SignUp = () => {
         lastname,
         email,
         password,
-        phone,
+        phone: phone.phone,
       };
       dispatch(register(userData));
+      navigate("/register/otp");
     }
   };
 
@@ -136,13 +156,21 @@ const SignUp = () => {
               </InputItems>
             </InputBox>
 
-            <Checkbox id="checkbox" />
-            <Label>
+            <Checkbox
+              id="checkbox"
+              checked={cheked}
+              onChange={() => setCheked(!cheked)}
+            />
+            <NormalLabel>
               By signing up, you agree to our<LINKS>User Agreement</LINKS> ,
               <LINKS>Terms of Service</LINKS>, & <LINKS>Privacy Policy</LINKS>
-            </Label>
+            </NormalLabel>
           </Box>
-          <Button variant="contained" onClick={handleSubmiit}>
+          <Button
+            loading={isLoading}
+            variant="contained"
+            onClick={handleSubmiit}
+          >
             Sign Up
           </Button>
           <Label>
