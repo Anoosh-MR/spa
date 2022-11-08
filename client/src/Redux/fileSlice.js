@@ -25,29 +25,28 @@ export const fileSlice = createSlice({
   name: "file",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.isSuccessRegister = false;
-      state.message = "";
+    AddtoFiles: (state, action) => {
+      console.log(action.payload.filesSelected);
+      const itemInSelectedFiles = state.Selectedfiles.find(
+        (item) => item === action.payload.filesSelected
+      );
+
+      if (itemInSelectedFiles) {
+        state.Selectedfiles.push({
+          ...itemInSelectedFiles,
+          ...action.payload.filesSelected,
+        });
+      } else {
+        state.Selectedfiles.push({ ...action.payload });
+      }
+    },
+    removeFiles: (state, action) => {
+      const item = state.cart.find((item) => item.name === action.payload);
+      state.Selectedfiles.filter((val) => {
+        val === action.payload;
+      });
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(SaveFile.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(SaveFile.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.user = action.payload;
-      })
-      .addCase(SaveFile.rejected, (state, action) => {
-        (state.isLoading = false), (state.isError = true);
-        state.message = action.payload;
-      });
-  },
 });
-export const { reset } = fileSlice.actions;
+export const { AddtoFiles, removeFiles } = fileSlice.actions;
 export default fileSlice.reducer;

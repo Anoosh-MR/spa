@@ -15,10 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Home = () => {
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.user
-  );
+  const { user } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!user) navigate("/register");
   }, [navigate]);

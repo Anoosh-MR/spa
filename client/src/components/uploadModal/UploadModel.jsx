@@ -1,4 +1,4 @@
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Button, imageListClasses, Modal } from "@mui/material";
 
 import React, { useState } from "react";
 import Fileview from "../FileView/Fileview";
@@ -22,10 +22,18 @@ const UploadModel = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
+
     setFiles([]);
     setIsFilePicked(false);
   };
 
+  const removeImage = (img) => {
+    console.log(img);
+    const filtered = files.filter((val) => {
+      val.name !== img.name;
+    });
+    console.log(filtered);
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -90,7 +98,11 @@ const UploadModel = () => {
             <Box>
               <DropBox2>
                 {files?.map((img) => (
-                  <Fileview key={img} img={img} />
+                  <Fileview
+                    key={img.size}
+                    img={img}
+                    removeImage={removeImage}
+                  />
                 ))}
               </DropBox2>
             </Box>

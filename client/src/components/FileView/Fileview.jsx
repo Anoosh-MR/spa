@@ -4,9 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { sizeConvertion } from "../../config/logics";
 import { height } from "@mui/system";
 
-const Fileview = ({ img }) => {
-  console.log(img);
-
+const Fileview = ({ img, removeImage }) => {
   return (
     <Box
       sx={{
@@ -18,8 +16,8 @@ const Fileview = ({ img }) => {
         height: "120px",
       }}
     >
-      <Btn>
-        <RemoveImg color="primary" s />
+      <Btn onClick={() => removeImage(img)}>
+        <RemoveImg color="primary" />
       </Btn>
       <Card
         style={{}}
