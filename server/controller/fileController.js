@@ -1,20 +1,25 @@
+const { json } = require("express");
 const Files = require("../models/fileModel");
 const User = require("../models/userModel");
 
 const addfiles = async (req, res) => {
-  const { userId, fileData } = req.body;
+  const { userId, images } = req.body;
+  const existImages = await Files.find({ owner: userId });
   try {
-    const existFile = await Files.find({ owner: userId });
-
-    var newFile = {
-      sender: req.user._id,
-      content: [...existFile, fileData],
+    const data = {
+      owner: userId,
+      images,
     };
-    const SavedFiles = new Files.create(newFile);
-    SavedFiles = await User.populate("owner");
-    res.json(SavedFiles);
+    const newImage = await Files.create({
+      ...existImages,
+      data,
+    });
+    const savedImages = await newImage.save();
+    res.status(200).json({
+      savedImages,
+    });
   } catch (err) {
-    throw new Error(error.messages);
+    res.status(500).json(err.message);
   }
 };
 

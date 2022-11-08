@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const fileSchema = new mongoose.Schema(
   {
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    content: [{ type: String, trim: true }],
+    owner: { type: String, required: true },
+    images: { type: Array },
   },
   { timestamps: true }
 );
