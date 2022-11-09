@@ -114,3 +114,21 @@ export const DropBox2 = styled(Grid)`
     background: #555;
   }
 `;
+
+export const FormField = styled.input`
+  font-size: 18px;
+  display: block;
+  height: 250px;
+  width: 600px;
+  border: none;
+  text-transform: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  &:focus {
+    outline: none;
+  }
+`;

@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
 
-const fileSchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+
+const mulitipleFileSchema = new Schema(
   {
-    owner: { type: String, required: true },
-    images: { type: Array },
+    title: {
+      type: String,
+      required: true,
+    },
+    files: [Object],
   },
   { timestamps: true }
 );
 
-const Files = mongoose.model("Files", fileSchema);
-
-module.exports = Files;
+module.exports = mongoose.model("MultipleFile", mulitipleFileSchema);

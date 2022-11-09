@@ -1,39 +1,52 @@
-import { Box, Button, imageListClasses, Modal } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import Fileview from "../FileView/Fileview";
 import CustomizedProgressBars from "../ProgressBar/ProgressBar";
+import { useNavigate } from "react-router-dom";
 
 import {
   CloseBtn,
   Div,
   DropBox,
   DropBox2,
+  FormField,
   Heading,
   IconAdd,
   UploadBtn,
 } from "./UploadModel.styled";
+import { multipleFilesUpload } from "../../../api/api";
 
-const UploadModel = () => {
+const UploadModel = ({ setFetchagain }) => {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
+
   const [isFilePicked, setIsFilePicked] = useState(false);
+  const fileInputField = useRef(null);
+  const [multipleProgress, setMultipleProgress] = useState(0);
+  const [bar, setbar] = useState(false);
+  const navigate = useNavigate();
+
+  const handleUploadBtnClick = () => {
+    fileInputField.current.click();
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
 
-    setFiles([]);
     setIsFilePicked(false);
   };
 
-  const removeImage = (img) => {
-    console.log(img);
-    const filtered = files.filter((val) => {
-      val.name !== img.name;
-    });
-    console.log(filtered);
+  const removeImage = (i) => {
+    let valueToRemove = [files[i]];
+    const numArray = files.filter(
+      (element) => !valueToRemove.includes(element)
+    );
+    setFiles(numArray);
   };
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -51,6 +64,45 @@ const UploadModel = () => {
     setFiles(filesSelected);
     setIsFilePicked(true);
   };
+  const FileHandler2 = (e) => {
+    const filesSelected = Array.from(e.target.files);
+    const Concated = files.concat(filesSelected);
+    setFiles(Concated);
+    setIsFilePicked(true);
+  };
+
+  const { user } = useSelector((state) => state.user);
+
+  const token = user.token;
+
+  const MultipleFileChange = (e) => {
+    setMultipleFiles(e.target.files);
+    setMultipleProgress(0);
+  };
+
+  const mulitpleFileOptions = {
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
+      setMultipleProgress(percentage);
+    },
+  };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i]);
+      const filename = Date.now() + files.name;
+      formData.append("title", user._id);
+    }
+    setbar(true);
+    await multipleFilesUpload(formData, mulitpleFileOptions);
+    setbar(false);
+    setFetchagain(true);
+    handleClose();
+  };
+
   return (
     <>
       <UploadBtn
@@ -83,33 +135,33 @@ const UploadModel = () => {
                 sx={{ textTransform: "none", width: "100px" }}
                 variant="outlined"
                 component="label"
+                onClick={handleUploadBtnClick}
               >
                 Browse
-                <input
-                  hidden
-                  accept="image/*"
-                  multiple
-                  type="file"
-                  onChange={FileHandler}
-                />
               </Button>
+
+              <FormField
+                hidden
+                accept="image/*"
+                multiple
+                type="file"
+                onChange={FileHandler}
+                ref={fileInputField}
+              />
             </DropBox>
           ) : (
             <Box>
               <DropBox2>
-                {files?.map((img) => (
-                  <Fileview
-                    key={img.size}
-                    img={img}
-                    removeImage={removeImage}
-                  />
+                {files?.map((img, i) => (
+                  <Fileview key={i} img={img} i={i} removeImage={removeImage} />
                 ))}
               </DropBox2>
             </Box>
           )}
-          <CustomizedProgressBars />
+          {bar && (
+            <CustomizedProgressBars multipleProgress={multipleProgress} />
+          )}
           <Div />
-
           {isFilePicked && (
             <Box
               sx={{
@@ -122,12 +174,21 @@ const UploadModel = () => {
               <Button
                 sx={{ height: "30px", width: "150px", textTransform: "none" }}
                 variant="outlined"
+                component="label"
               >
+                <input
+                  hidden
+                  accept="image/*"
+                  multiple
+                  type="file"
+                  onChange={FileHandler2}
+                />
                 Add more
               </Button>
               <Button
                 sx={{ height: "30px", width: "150px", textTransform: "none" }}
                 variant="contained"
+                onClick={handleUpload}
               >
                 Upload
               </Button>

@@ -1,11 +1,17 @@
 const express = require("express");
-const { addfiles } = require("../controller/fileController");
+const { upload } = require("../config/fileHelper");
+const {
+  multipleFileUpload,
+  getallMultipleFiles,
+} = require("../controller/fileController");
 const authenticateJWT = require("../middleware/AuthMiddleware");
 
 const router = express.Router();
 
 // router.route("/").post(Fetchfiles);
-router.route("/add").post(authenticateJWT, addfiles);
+// router.route("/add").post(authenticateJWT, addfiles);
+router.post("/fileUpload", upload.array("files"), multipleFileUpload);
+router.get("/getFiles", getallMultipleFiles);
 // router.put("/delete").delete(removefiles);
 
 module.exports = router;

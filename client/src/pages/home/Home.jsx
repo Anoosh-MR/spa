@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   HeaderBox,
@@ -13,15 +13,30 @@ import image from "../../assets/images/image 15.jpg";
 import UploadModel from "../../components/uploadModal/UploadModel";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getMultipleFiles } from "../../../api/api";
+import { ImageList, ImageListItem } from "@mui/material";
 
 const Home = () => {
+  const [files, setfiles] = useState();
+  const [fetchagain, setFetchagain] = useState(false);
+  console.log(files);
   const { user } = useSelector((state) => state.user);
+  const title = user._id;
+  const PF = "http://localhost:5000/";
 
   const navigate = useNavigate();
 
+  const fetchPicture = () => {
+    getMultipleFiles(title).then((res) => {
+      setfiles(res);
+    });
+  };
+
   useEffect(() => {
     if (!user) navigate("/register");
-  }, [navigate]);
+    fetchPicture();
+  }, [navigate, fetchagain]);
+
   return (
     <HomeContainer>
       <HeaderBox>
@@ -30,12 +45,26 @@ const Home = () => {
           <Paragraph variant="p">0 images</Paragraph>
         </HeadingContainer>
 
-        <UploadModel />
+        <UploadModel setFetchagain={setFetchagain} />
       </HeaderBox>
-      <ImagesContainer>
-        <NothingBanner src={image} />
-        <Paragraph>Click on ‘Upload’ to start adding images</Paragraph>
-      </ImagesContainer>
+      {files ? (
+        <ImageList
+          sx={{ width: 500, height: 450, margin: "50px" }}
+          cols={3}
+          rowHeight={164}
+        >
+          {files.map((item, id) => (
+            <ImageListItem key={id}>
+              <img src={PF + item.path} alt={PF + item.path} loading="lazy" />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      ) : (
+        <ImagesContainer>
+          <NothingBanner src={image} />
+          <Paragraph>Click on ‘Upload’ to start adding images</Paragraph>
+        </ImagesContainer>
+      )}
     </HomeContainer>
   );
 };

@@ -15,10 +15,10 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 // Inspired by the former Facebook spinners.
 
-export default function CustomizedProgressBars() {
+export default function CustomizedProgressBars({ multipleProgress }) {
   return (
     <Box sx={{ flexGrow: 1, marginTop: "2px" }}>
-      <BorderLinearProgress variant="determinate" value={50} />
+      <BorderLinearProgress variant="determinate" value={multipleProgress} />
     </Box>
   );
 }
