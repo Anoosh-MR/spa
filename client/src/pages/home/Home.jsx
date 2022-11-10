@@ -14,15 +14,16 @@ import UploadModel from "../../components/uploadModal/UploadModel";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getMultipleFiles } from "../../../api/api";
-import { ImageList, ImageListItem } from "@mui/material";
+import { ImageList } from "@mui/material";
+import { Box } from "@mui/system";
+import ImageView from "../../components/imageView/ImageView";
 
 const Home = () => {
   const [files, setfiles] = useState();
-  const [fetchagain, setFetchagain] = useState(false);
+
   console.log(files);
   const { user } = useSelector((state) => state.user);
   const title = user._id;
-  const PF = "http://localhost:5000/";
 
   const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ const Home = () => {
   useEffect(() => {
     if (!user) navigate("/register");
     fetchPicture();
-  }, [navigate, fetchagain]);
+  }, [navigate]);
 
   return (
     <HomeContainer>
@@ -45,18 +46,26 @@ const Home = () => {
           <Paragraph variant="p">0 images</Paragraph>
         </HeadingContainer>
 
-        <UploadModel setFetchagain={setFetchagain} />
+        <UploadModel fetchPicture={fetchPicture} />
       </HeaderBox>
-      {files ? (
+      {files?.length > 0 ? (
         <ImageList
-          sx={{ width: 500, height: 450, margin: "50px" }}
-          cols={3}
-          rowHeight={164}
+          variant="standard"
+          sx={{
+            width: 1250,
+            height: 450,
+            padding: "50px",
+          }}
+          rows={4}
+          cols={4}
+          rowHeight={200}
         >
-          {files.map((item, id) => (
-            <ImageListItem key={id}>
-              <img src={PF + item.path} alt={PF + item.path} loading="lazy" />
-            </ImageListItem>
+          {files.map((element, index) => (
+            <Box key={element._id}>
+              {element.files.map((file, index) => (
+                <ImageView key={file.filePath} file={file} />
+              ))}
+            </Box>
           ))}
         </ImageList>
       ) : (

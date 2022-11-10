@@ -6,7 +6,6 @@ const mulitipleFileSchema = new Schema(
   {
     title: {
       type: String,
-      required: true,
     },
     files: [Object],
   },

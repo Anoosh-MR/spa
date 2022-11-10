@@ -11,7 +11,7 @@ const router = express.Router();
 // router.route("/").post(Fetchfiles);
 // router.route("/add").post(authenticateJWT, addfiles);
 router.post("/fileUpload", upload.array("files"), multipleFileUpload);
-router.get("/getFiles", getallMultipleFiles);
+router.post("/getFiles", getallMultipleFiles);
 // router.put("/delete").delete(removefiles);
 
 module.exports = router;

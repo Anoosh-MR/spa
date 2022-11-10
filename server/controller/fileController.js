@@ -1,27 +1,25 @@
 const MultipleFile = require("../models/fileModel");
 
 const multipleFileUpload = async (req, res) => {
-  console.log(req.body);
   try {
-    // let filesArray = [];
-    // req.files.forEach((element) => {
-    //   const file = {
-    //     fileName: element.originalname,
-    //     filePath: element.path,
-    //     fileType: element.mimetype,
-    //     fileSize: fileSizeFormatter(element.size, 2),
-    //   };
-    //   filesArray.push(file);
-    // });
-    // console.log(req.files);
+    let filesArray = [];
+    req.files.forEach((element) => {
+      const file = {
+        fileName: element.originalname,
+        filePath: element.path,
+        fileType: element.mimetype,
+        fileSize: fileSizeFormatter(element.size, 2),
+      };
+      filesArray.push(file);
+    });
     const multipleFiles = new MultipleFile({
       title: req.body.title,
-      files: req.files,
+      files: filesArray,
     });
     await multipleFiles.save();
     res.status(201).send("Files Uploaded Successfully");
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(400).send(error.message);
   }
 };
 
@@ -38,9 +36,11 @@ const fileSizeFormatter = (bytes, decimal) => {
 };
 
 const getallMultipleFiles = async (req, res) => {
-  const { title } = req.body;
+  const title = req.body.title;
   try {
-    const files = await MultipleFile.find(title);
+    const files = await MultipleFile.find({
+      title: title,
+    });
 
     res.status(200).send(files);
   } catch (error) {

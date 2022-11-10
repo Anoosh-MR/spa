@@ -18,7 +18,7 @@ import {
 } from "./UploadModel.styled";
 import { multipleFilesUpload } from "../../../api/api";
 
-const UploadModel = ({ setFetchagain }) => {
+const UploadModel = ({ fetchPicture }) => {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
 
@@ -63,6 +63,7 @@ const UploadModel = ({ setFetchagain }) => {
     const filesSelected = Array.from(e.target.files);
     setFiles(filesSelected);
     setIsFilePicked(true);
+    setMultipleProgress(0);
   };
   const FileHandler2 = (e) => {
     const filesSelected = Array.from(e.target.files);
@@ -74,11 +75,6 @@ const UploadModel = ({ setFetchagain }) => {
   const { user } = useSelector((state) => state.user);
 
   const token = user.token;
-
-  const MultipleFileChange = (e) => {
-    setMultipleFiles(e.target.files);
-    setMultipleProgress(0);
-  };
 
   const mulitpleFileOptions = {
     onUploadProgress: (progressEvent) => {
@@ -93,13 +89,12 @@ const UploadModel = ({ setFetchagain }) => {
 
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
-      const filename = Date.now() + files.name;
       formData.append("title", user._id);
     }
     setbar(true);
     await multipleFilesUpload(formData, mulitpleFileOptions);
     setbar(false);
-    setFetchagain(true);
+    fetchPicture();
     handleClose();
   };
 

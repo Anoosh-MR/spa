@@ -12,9 +12,10 @@ export const multipleFilesUpload = async (data, options) => {
   }
 };
 
-export const getMultipleFiles = async (user_id) => {
+export const getMultipleFiles = async (title) => {
+  console.log(title);
   try {
-    const { data } = await axios.get(apiUrl + "getFiles", user_id);
+    const { data } = await axios.post(apiUrl + "getFiles", { title });
     return data;
   } catch (error) {
     throw error;
