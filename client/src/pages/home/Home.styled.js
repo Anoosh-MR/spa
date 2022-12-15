@@ -5,7 +5,7 @@ var familyMan = `'Manrope', sans-serif`;
 
 export const HomeContainer = styled(Box)`
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 `;
 export const HeaderBox = styled(Box)`
   display: flex;
@@ -40,4 +40,11 @@ export const NothingBanner = styled.img`
   width: 613px;
   height: 338px;
   margin-bottom: 70px;
+`;
+export const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 100%;
+  gap: 10px;
 `;

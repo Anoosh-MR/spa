@@ -89,8 +89,8 @@ const UploadModel = ({ fetchPicture }) => {
 
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
-      formData.append("title", user._id);
     }
+    formData.append("title", user._id);
     setbar(true);
     await multipleFilesUpload(formData, mulitpleFileOptions);
     setbar(false);

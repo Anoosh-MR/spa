@@ -11,6 +11,7 @@ const ImageView = ({ file }) => {
         margin: "5px",
         border: "1px",
         borderRadius: "10px",
+        width: "270px",
       }}
     >
       <ImageListItemsTop
@@ -20,7 +21,7 @@ const ImageView = ({ file }) => {
         position="top"
         actionIcon={
           <IconButton>
-            <Checkbox />
+            <Checkbox color="error" />
           </IconButton>
         }
         actionPosition="left"
@@ -31,14 +32,6 @@ const ImageView = ({ file }) => {
         src={PF + file.filePath}
         alt={PF + file.filePath}
         loading="lazy"
-      />
-
-      <ImageListItemsTop
-        title={file.fileName}
-        subtitle={file.fileSize}
-        actionIcon={
-          <Chip className="chip" color="info" label={file.fileType} />
-        }
       />
     </ImageListItem>
   );

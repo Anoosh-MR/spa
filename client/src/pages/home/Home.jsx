@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import {
+  ButtonContainer,
   HeaderBox,
   Heading,
   HeadingContainer,
@@ -15,20 +16,19 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getMultipleFiles } from "../../../api/api";
 import { ImageList } from "@mui/material";
-import { Box } from "@mui/system";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ImageView from "../../components/imageView/ImageView";
+import { UploadBtn } from "../../components/uploadModal/UploadModel.styled";
 
 const Home = () => {
   const [files, setfiles] = useState();
 
-  console.log(files);
   const { user } = useSelector((state) => state.user);
-  const title = user._id;
 
   const navigate = useNavigate();
 
   const fetchPicture = () => {
-    getMultipleFiles(title).then((res) => {
+    getMultipleFiles(user._id).then((res) => {
       setfiles(res);
     });
   };
@@ -45,28 +45,33 @@ const Home = () => {
           <Heading variant="h3">Media Library</Heading>
           <Paragraph variant="p">0 images</Paragraph>
         </HeadingContainer>
-
-        <UploadModel fetchPicture={fetchPicture} />
+        <ButtonContainer>
+          <UploadModel fetchPicture={fetchPicture} />
+          <UploadBtn
+            variant="outlined"
+            sx={{ textTransform: "none", fontWeight: "700" }}
+            startIcon={<DeleteIcon sx={{ marginRight: "10px" }} />}
+          >
+            Delete Selected
+          </UploadBtn>
+        </ButtonContainer>
       </HeaderBox>
       {files?.length > 0 ? (
         <ImageList
-          variant="standard"
           sx={{
-            width: 1250,
-            height: 450,
-            padding: "50px",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "20px",
           }}
-          rows={4}
-          cols={4}
           rowHeight={200}
         >
-          {files.map((element, index) => (
-            <Box key={element._id}>
-              {element.files.map((file, index) => (
-                <ImageView key={file.filePath} file={file} />
-              ))}
-            </Box>
-          ))}
+          {files.map((element, index) =>
+            element.files.map((file, index) => (
+              <ImageView key={file.filePath} file={file} />
+            ))
+          )}
         </ImageList>
       ) : (
         <ImagesContainer>

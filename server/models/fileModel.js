@@ -7,7 +7,9 @@ const mulitipleFileSchema = new Schema(
     title: {
       type: String,
     },
-    files: [Object],
+    files: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );
