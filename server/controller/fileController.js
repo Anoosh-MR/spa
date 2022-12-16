@@ -8,6 +8,7 @@ const multipleFileUpload = async (req, res) => {
         fileName: element.originalname,
         filePath: element.path,
         fileType: element.mimetype,
+        title: req.body.title,
         fileSize: fileSizeFormatter(element.size, 2),
       };
       filesArray.push(file);
@@ -48,7 +49,21 @@ const getallMultipleFiles = async (req, res) => {
   }
 };
 
+const removefiles = async (req, res) => {
+  try {
+    await MultipleFile.updateOne(
+      { files: req.body },
+      { $pull: { files: req.body } }
+    );
+
+    res.status(200).json({ message: "delete successfull" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   multipleFileUpload,
   getallMultipleFiles,
+  removefiles,
 };
